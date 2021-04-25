@@ -1,4 +1,5 @@
-const { topupParams, paymentParams } = require('../helpers/validator/paramsValidator')
+const User = require('../models/User')
+const { topupParams, paymentParams, transferParams } = require('../helpers/validator/paramsValidator')
 const { respondWith } = require('../helpers/responder')
 
 const topup = async (req, res) => {
@@ -30,7 +31,24 @@ const payment = async (req, res, next) => {
   }
 }
 
+const transfer = async (req, res, next) => {
+  try {
+    const { value: trxParams, error } = transferParams.validate(req.body)
+    if (!error) {
+      const targetUser = await User.findOne({ user_id: trxParams.target_user }).exec()
+      const transfer = await req.account.transfer({ ...trxParams, targetUser })
+      if (transfer.error) return next({ message: transfer.message })
+      res.json(respondWith('transferSuccess', transfer))
+    } else {
+      res.send({ message: error })
+    }
+  } catch (error) {
+    res.json({ message: error.message })
+  }
+}
+
 module.exports = {
   topup,
-  payment
+  payment,
+  transfer
 }

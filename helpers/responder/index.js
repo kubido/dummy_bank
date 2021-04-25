@@ -44,8 +44,22 @@ function respondWith(resource, payload) {
       response = {
         status: "success",
         result: {
-          top_up_id: payload.payment_id,
+          payment_id: payload.payment_id,
           amount: payload.amount,
+          remarks: payload.remarks,
+          balance_before: payload.balance_before,
+          balance_after: payload.balance_after,
+          created_date: payload.created_date
+        }
+      }
+      break
+    case 'transferSuccess':
+      response = {
+        status: "success",
+        result: {
+          payment_id: payload.payment_id,
+          amount: payload.amount,
+          remarks: payload.remarks,
           balance_before: payload.balance_before,
           balance_after: payload.balance_after,
           created_date: payload.created_date
