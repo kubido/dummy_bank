@@ -1,4 +1,5 @@
 const User = require('../models/User')
+const Account = require('../models/Account')
 const { registerParams, loginParams } = require('../helpers/validator/paramsValidator')
 const { respondWith } = require('../helpers/responder')
 

@@ -2,17 +2,24 @@ const mongoose = require('mongoose')
 
 const options = { discriminatorKey: 'kind' }
 
-const TransactionSchema = new mongoose.Schema({
+const transactionSchema = new mongoose.Schema({
   "account": {
-    type: Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'Account'
   },
+  "status": {
+    type: String,
+    default: "PENDING",
+  },
   "user_id": {
-    type: Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
   },
   "transaction_type": String,
-  "amount": Number,
+  "amount": {
+    type: Number,
+    required: true
+  },
   "remarks": String,
   "created_date": {
     type: Date,
@@ -20,6 +27,13 @@ const TransactionSchema = new mongoose.Schema({
   }
 }, options)
 
-const Transaction = mongoose.model('Transaction', TransactionSchema)
+transactionSchema.virtual('balance_before')
+transactionSchema.virtual('balance_after')
+
+transactionSchema.set('toJSON', {
+  virtuals: true
+});
+
+const Transaction = mongoose.model('Transaction', transactionSchema)
 
 module.exports = Transaction

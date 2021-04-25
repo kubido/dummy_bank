@@ -1,7 +1,9 @@
 const mongoose = require('mongoose')
 const { v4: uuidv4 } = require('uuid');
 
-const UserSchema = new mongoose.Schema({
+const Account = require('./Account')
+
+const userSchema = new mongoose.Schema({
   "user_id": {
     type: String,
     default: uuidv4()
@@ -25,16 +27,23 @@ const UserSchema = new mongoose.Schema({
   "created_date": {
     type: Date,
     default: new Date()
-  }
+  },
 })
 
-UserSchema.post('save', function (error, doc, next) {
+userSchema.pre('save', async function (doc, next) {
+  let account = new Account({ user: this._id })
+  console.log(account);
+  await account.save()
+})
+
+userSchema.post('save', function (error, doc, next) {
   if (error.name === 'MongoError' && error.code === 11000) {
     next(new Error('Phone Number already registered'));
   } else {
     next(error);
   }
 });
-const User = mongoose.model('User', UserSchema)
+
+const User = mongoose.model('User', userSchema)
 
 module.exports = User

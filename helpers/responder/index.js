@@ -1,3 +1,4 @@
+const { ProxyAuthenticationRequired } = require('http-errors');
 const jwt = require('../../helpers/jwt')
 
 function respondWith(resource, payload) {
@@ -26,6 +27,18 @@ function respondWith(resource, payload) {
       break;
     case 'loginError':
       response = { code: 401, message: "Phone number and pin doesn’t match." }
+      break
+    case 'topupSuccess':
+      response = {
+        status: "success",
+        result: {
+          top_up_id: payload.top_up_id,
+          amount_top_up: payload.amount,
+          balance_before: payload.balance_before,
+          balance_after: payload.balance_after,
+          created_date: payload.created_date
+        }
+      }
       break
     default:
       break;

@@ -3,13 +3,17 @@ const { v4: uuidv4 } = require('uuid');
 
 const Transaction = require('./index')
 
-const TopupSchema = new mongoose.Schema({
+const topupSchema = new mongoose.Schema({
   "top_up_id": {
     type: String,
     default: uuidv4()
   },
+  "transaction_type": {
+    type: String,
+    default: "CREDIT"
+  },
 })
 
-const Topup = Transaction.discriminator('Topup', TopupSchema)
+const Topup = Transaction.discriminator('Topup', topupSchema)
 
 module.exports = Topup
