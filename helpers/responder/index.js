@@ -40,6 +40,18 @@ function respondWith(resource, payload) {
         }
       }
       break
+    case 'paymentSuccess':
+      response = {
+        status: "success",
+        result: {
+          top_up_id: payload.payment_id,
+          amount: payload.amount,
+          balance_before: payload.balance_before,
+          balance_after: payload.balance_after,
+          created_date: payload.created_date
+        }
+      }
+      break
     default:
       break;
   }

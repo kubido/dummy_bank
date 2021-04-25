@@ -1,5 +1,6 @@
 
 const User = require('../models/User')
+const Account = require('../models/Account')
 
 const jwt = require('../helpers/jwt')
 const { authHeaders } = require('../helpers/validator/headersValidator')
@@ -13,6 +14,7 @@ const authenticate = async (req, res, next) => {
       let user = await User.findOne({ phone_number, pin })
       if (!user) throw new Error('Unauthorized')
       req.currentUser = user
+      req.account = await Account.findOne({ user: req.currentUser._id })
       next()
     } else {
       next(error)

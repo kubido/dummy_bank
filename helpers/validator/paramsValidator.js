@@ -37,8 +37,17 @@ const topupParams = Joi.object({
     .min(10000)
 })
 
+const paymentParams = Joi.object({
+  amount: Joi.number()
+    .required()
+    .min(10000),
+  remarks: Joi.string()
+    .required()
+})
+
 module.exports = {
   registerParams,
   loginParams,
-  topupParams
+  topupParams,
+  paymentParams
 }
