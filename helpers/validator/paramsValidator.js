@@ -1,6 +1,6 @@
 const Joi = require('joi')
 
-const userParamsSchema = Joi.object({
+const registerParams = Joi.object({
   first_name: Joi.string()
     .min(3)
     .max(25),
@@ -8,16 +8,30 @@ const userParamsSchema = Joi.object({
     .min(3)
     .max(25),
   phone_number: Joi.string()
+    .required()
     .min(8)
     .max(14),
   pin: Joi.string()
+    .required()
     .min(5)
     .max(12),
   address: Joi.string()
     .min(15)
     .max(200)
-}).with("phone_number", "pin")
+})
+
+const loginParams = Joi.object({
+  phone_number: Joi.string()
+    .required()
+    .min(8)
+    .max(14),
+  pin: Joi.string()
+    .required()
+    .min(5)
+    .max(12),
+})
 
 module.exports = {
-  userParamsSchema
+  registerParams,
+  loginParams
 }
