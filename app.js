@@ -5,7 +5,10 @@ const mongoose = require('mongoose');
 const { setQueues, BullAdapter, router: bullRouter } = require('bull-board')
 const jobQueue = require('./jobs/TransferJob')
 
-mongoose.connect('mongodb://localhost:27017/mnc_banks', {
+let NODE_ENV = process.env.NODE_ENV || "development"
+
+// hardcode for interview purpose
+mongoose.connect(`mongodb://localhost:27017/mnc_banks_${NODE_ENV}`, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -13,8 +16,6 @@ mongoose.connect('mongodb://localhost:27017/mnc_banks', {
 setQueues([
   new BullAdapter(jobQueue.transferJob),
 ]);
-
-
 
 const errorHandler = require('./middlewares/errorHandler')
 const router = require('./routes/index');
