@@ -29,40 +29,43 @@ function respondWith(resource, payload) {
       response = { code: 401, message: "Phone number and pin doesn’t match." }
       break
     case 'topupSuccess':
+      let { top_up_id, amount: amount_top_up, balance_before, balance_after, created_date } = payload
       response = {
         status: "success",
         result: {
-          top_up_id: payload.top_up_id,
-          amount_top_up: payload.amount,
-          balance_before: payload.balance_before,
-          balance_after: payload.balance_after,
-          created_date: payload.created_date
+          top_up_id,
+          amount_top_up,
+          balance_before,
+          balance_after,
+          created_date,
         }
       }
       break
     case 'paymentSuccess':
+      let { payment_id, amount, remarks, balance_before, balance_after, created_date } = payload
       response = {
         status: "success",
         result: {
-          payment_id: payload.payment_id,
-          amount: payload.amount,
-          remarks: payload.remarks,
-          balance_before: payload.balance_before,
-          balance_after: payload.balance_after,
-          created_date: payload.created_date
+          payment_id,
+          amount,
+          remarks,
+          balance_before,
+          balance_after,
+          created_date
         }
       }
       break
     case 'transferSuccess':
+      let { transfer_id, amount, remarks, balance_before, balance_after, created_date } = payload
       response = {
         status: "success",
         result: {
-          transfer_id: payload.transfer_id,
-          amount: payload.amount,
-          remarks: payload.remarks,
-          balance_before: payload.balance_before,
-          balance_after: payload.balance_after,
-          created_date: payload.created_date
+          transfer_id,
+          amount,
+          remarks,
+          balance_before,
+          balance_after,
+          created_date
         }
       }
       break
