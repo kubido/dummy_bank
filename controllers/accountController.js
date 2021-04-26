@@ -11,10 +11,11 @@ const topup = async (req, res) => {
       const data = respondWith('topupSuccess', topup)
       res.json(data)
     } else {
-      res.send({ message: error })
+      next({ name: "TopupFailed", message: error.details.map(e => e.message).join(",") })
     }
   } catch (error) {
-    res.json({ message: error.message })
+    next({ name: "TopupFailed", message: error.message })
+
   }
 }
 
@@ -27,10 +28,10 @@ const payment = async (req, res, next) => {
       const data = respondWith('paymentSuccess', payment)
       res.json(data)
     } else {
-      res.send({ message: error })
+      next({ name: "PaymentFailed", message: error.details.map(e => e.message).join(",") })
     }
   } catch (error) {
-    res.json({ message: error.message })
+    next({ name: "PaymentFailed", message: error.message })
   }
 }
 
@@ -39,15 +40,23 @@ const transfer = async (req, res, next) => {
     const { value: trxParams, error } = transferParams.validate(req.body)
     if (!error) {
       const targetUser = await User.findOne({ user_id: trxParams.target_user }).exec()
-      const transfer = await req.account.transfer({ ...trxParams, targetUser })
-      if (transfer.error) return next({ message: transfer.message })
-      const data = respondWith('transferSuccess', transfer)
-      res.json(data)
+
+      // transaction without queue
+      // const transfer = await req.account.doDirectTransfer({ ...trxParams, targetUser })
+      // if (transfer.error) return next({ message: transfer.message })
+      // const data = respondWith('transferSuccess', transfer)
+      // res.json(data)
+
+      // transaction with queue
+      const transferStatus = await req.account.doTransfer({ ...trxParams, targetUser })
+      if (!transferStatus) return next({ name: "TransferFailed", message: "Something went wrong" })
+      const data = respondWith('transferSuccess', payment)
+      res.status(200).json(data)
     } else {
-      res.send({ message: error })
+      res.send({ message: error.details.map(e => e.message).join(",") })
     }
   } catch (error) {
-    res.json({ message: error.message })
+    next({ name: "TransferFailed", message: error.message })
   }
 }
 

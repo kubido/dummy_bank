@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const { v4: uuidv4 } = require('uuid');
 
 const Transaction = require('./index')
+const jobQueu = require('../../jobs/TransferJob')
 
 const transferSchema = new mongoose.Schema({
   "transfer_id": {
@@ -15,8 +16,22 @@ const transferSchema = new mongoose.Schema({
 })
 
 transferSchema.statics.doTransfer = async function ({ sourceAccount, targetAccount, remarks, amount }) {
-  const session = await mongoose.startSession();
-  session.startTransaction()
+  try {
+    let job = await jobQueu.transferJob.add({
+      sourceAccount,
+      targetAccount,
+      remarks,
+      amount
+    })
+    return job.id
+  } catch (error) {
+    return false
+  }
+}
+
+transferSchema.statics.doDirectTransfer = async function ({ sourceAccount, targetAccount, remarks, amount }) {
+  // const session = await mongoose.startSession();
+  // session.startTransaction()
   try {
     // credit to target account with transactions
     // let creditTrx = await this.create([{ remarks, amount, transaction_type: "CREDIT", account: targetAccount._id }], { session })
@@ -55,7 +70,6 @@ transferSchema.statics.doTransfer = async function ({ sourceAccount, targetAccou
       $inc: { balance: amount },
       $push: { transactions: creditTrx }
     })
-    console.log(debitTrx);
 
     return debitTrx
 
@@ -64,12 +78,6 @@ transferSchema.statics.doTransfer = async function ({ sourceAccount, targetAccou
     // session.endSession();
     throw error;
   }
-
-
-
-
-
-
 
 }
 

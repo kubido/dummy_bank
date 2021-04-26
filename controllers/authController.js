@@ -29,7 +29,6 @@ const login = async (req, res) => {
       let response = respondWith('loginSuccess', { phone_number, pin })
       res.status(200).json(response)
     } else {
-      console.log(error);
       throw respondWith('loginError')
     }
   } catch (err) {

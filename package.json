@@ -6,6 +6,8 @@
     "start": "nodemon ./bin/www"
   },
   "dependencies": {
+    "bull": "^3.22.3",
+    "bull-board": "^1.7.2",
     "debug": "~2.6.9",
     "ejs": "~2.6.1",
     "express": "~4.16.1",

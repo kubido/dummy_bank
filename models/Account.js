@@ -63,17 +63,28 @@ accountSchema.methods.payment = async function ({ amount, remarks }) {
   return await payment.populate('account').execPopulate()
 }
 
-accountSchema.methods.transfer = async function ({ targetUser, remarks, amount }) {
+accountSchema.methods.doTransfer = async function ({ targetUser, remarks, amount }) {
   if (this.balance < amount) return { error: true, message: "Balance is not enough" }
   let targetAccount = await Account.findOne({ user: targetUser._id })
-  console.log('target----------_>', targetAccount);
-  let transfer = await Transfer.doTransfer({
+  let transferStatus = await Transfer.doTransfer({
     sourceAccount: this,
-    targetAccount,
+    targetAccount: targetAccount,
     remarks,
     amount
   })
-  return await transfer.populate('account').execPopulate()
+  return await transferStatus
+}
+
+accountSchema.methods.doDirectTransfer = async function ({ targetUser, remarks, amount }) {
+  if (this.balance < amount) return { error: true, message: "Balance is not enough" }
+  let targetAccount = await Account.findOne({ user: targetUser._id })
+  let transfer = await Transfer.doDirectTransfer({
+    sourceAccount: this,
+    targetAccount: targetAccount,
+    remarks,
+    amount
+  })
+  return await transfer
 }
 
 const Account = mongoose.model('Account', accountSchema)

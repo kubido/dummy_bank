@@ -1,10 +1,14 @@
 const errorHandler = (err, req, res, next) => {
   let errCode = err.code || 500
   switch (err.name) {
-    case 'databaseValidation':
-
+    case 'TopupFailed':
+      res.status(400).json({ message: err.message })
       break;
-    case 'paramValidation':
+    case 'PaymentFailed':
+      res.status(400).json({ message: err.message })
+      break;
+    case 'TransferFailed':
+      res.status(400).json({ message: err.message })
       break;
     default:
       res.status(errCode).json({ message: err.message })
