@@ -66,6 +66,27 @@ function respondWith(resource, payload) {
         }
       }
       break
+    case 'transactionsSuccess':
+      let result = payload.map(trx => {
+        let trxItem = {}
+        if (trx.transfer_id) trxItem.transfer_id = trx.transfer_id
+        if (trx.payment_id) trxItem.payment_id = trx.payment_id
+        if (trx.top_up_id) trxItem.top_up_id = trx.top_up_id
+        return {
+          ...trxItem,
+          status: trx.status,
+          user_id: trx.account.user.user_id,
+          amount: trx.amount,
+          remarks: trx.remarks || "",
+          balance_before: trx.balance_before,
+          balance_after: trx.balance_after,
+          created_date: trx.created_date
+        }
+      })
+      response = {
+        status: "success",
+        result
+      }
     default:
       break;
   }

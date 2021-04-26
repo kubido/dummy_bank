@@ -26,6 +26,8 @@ transferSchema.statics.doTransfer = async function ({ sourceAccount, targetAccou
     let debitTrx = await this.create({
       remarks,
       amount,
+      balance_before: sourceAccount.balance,
+      balance_after: sourceAccount.balance - amount,
       account: sourceAccount._id
     })
 
@@ -34,6 +36,8 @@ transferSchema.statics.doTransfer = async function ({ sourceAccount, targetAccou
       remarks,
       amount,
       transaction_type: "CREDIT",
+      balance_before: sourceAccount.balance,
+      balance_after: sourceAccount.balance + amount,
       account: targetAccount._id
     })
 
