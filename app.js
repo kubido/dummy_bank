@@ -1,7 +1,11 @@
 const express = require('express');
 const logger = require('morgan');
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/mnc_banks', { useNewUrlParser: true, useUnifiedTopology: true });
+
+mongoose.connect('mongodb://localhost:27017/mnc_banks', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
 const errorHandler = require('./middlewares/errorHandler')
 const router = require('./routes/index');

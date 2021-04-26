@@ -5,6 +5,6 @@ const accountController = require('../controllers/accountController')
 router.post('/topup', accountController.topup);
 router.post('/pay', accountController.payment);
 router.post('/transfer', accountController.transfer);
-// router.post('/transactions', accountController.transactions);
+router.post('/transactions', accountController.transactions);
 
 module.exports = router;

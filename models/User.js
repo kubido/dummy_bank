@@ -30,9 +30,9 @@ const userSchema = new mongoose.Schema({
   },
 })
 
-userSchema.pre('save', async function (doc, next) {
+userSchema.pre('save', async function (next) {
   let account = new Account({ user: this._id })
-  console.log(account);
+  this.user_id = uuidv4()
   await account.save()
 })
 

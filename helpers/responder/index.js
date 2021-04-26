@@ -57,7 +57,7 @@ function respondWith(resource, payload) {
       response = {
         status: "success",
         result: {
-          payment_id: payload.payment_id,
+          transfer_id: payload.transfer_id,
           amount: payload.amount,
           remarks: payload.remarks,
           balance_before: payload.balance_before,

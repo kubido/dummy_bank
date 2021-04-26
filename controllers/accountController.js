@@ -47,8 +47,25 @@ const transfer = async (req, res, next) => {
   }
 }
 
+const transactions = async (req, res, next) => {
+  try {
+    // const { value: trxParams, error } = transferParams.validate(req.body)
+    if (!error) {
+      // const targetUser = await User.findOne({ user_id: trxParams.target_user }).exec()
+      // const transfer = await req.account.transfer({ ...trxParams, targetUser })
+      // if (transfer.error) return next({ message: transfer.message })
+      // res.json(respondWith('transferSuccess', transfer))
+    } else {
+      res.send({ message: error })
+    }
+  } catch (error) {
+    res.json({ message: error.message })
+  }
+}
+
 module.exports = {
   topup,
   payment,
-  transfer
+  transfer,
+  transactions
 }

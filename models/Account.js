@@ -66,6 +66,7 @@ accountSchema.methods.payment = async function ({ amount, remarks }) {
 accountSchema.methods.transfer = async function ({ targetUser, remarks, amount }) {
   if (this.balance < amount) return { error: true, message: "Balance is not enough" }
   let targetAccount = await Account.findOne({ user: targetUser._id })
+  console.log('target----------_>', targetAccount);
   let transfer = await Transfer.doTransfer({
     sourceAccount: this,
     targetAccount,
