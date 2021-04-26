@@ -13,6 +13,10 @@
 5. `npm start` or `npm test`
 6. bull dashboard queue can be accessed from `localhost:3000/queues`
 
+# POSTMAN
+
+attached postman request in a file called `bank.postman_collection.json`
+
 # NOTES
 
 1. test not finished for
